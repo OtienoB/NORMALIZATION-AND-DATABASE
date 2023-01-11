@@ -1,0 +1,4 @@
+Note: 
+1.	All the workings above are based on fictional data as specified in the instructions.
+2.	You can as well copy the syntax one by one as you test. Please use XAMPP.
+3.	I have attached an exported database file here too. You can alternatively import it to XAMPP and run.

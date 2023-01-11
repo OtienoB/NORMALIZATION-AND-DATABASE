@@ -1,0 +1,116 @@
+The ERD:
+
+EMPLOYEE						COFFEE_SHOP						COFFEE	
+PK	employee_id	INTEGER				PK	shop_id	INTEGER				PK	coffee_id
+	first_name	VARCHAR(30)		M:1			shop_name	VARCHAR(50)		1:M		FK	shop_id
+	last_name	VARCHAR(30)					city	VARCHAR(50)				FK	supplier_id
+	hire_date	DATE					state	CHAR(2)					coffee_name
+	job_title	VARCHAR(30)											price_per_pound
+FK	shop_id	INTEGER											
+													
+													
+												SUPPLIER	
+												PK	supplier_id
+													company_name
+													country
+													sales_contact_name
+SQL Solutions.
+1. SQL Code to Create Tables
+
+CREATE TABLE Employee 
+(
+    employee_id INTEGER PRIMARY KEY,
+    first_name VARCHAR(30),
+    last_name VARCHAR(30),
+    hire_date DATE,
+    job_title VARCHAR(30),
+    shop_id INTEGER NOT NULL,
+    FOREIGN KEY (shop_id) REFERENCES Coffee_Shop (shop_id)
+);
+
+CREATE TABLE Coffee_Shop 
+(
+    shop_id INTEGER PRIMARY KEY,
+    shop_name VARCHAR(50) NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    state CHAR(2) NOT NULL
+);
+
+CREATE TABLE Coffee 
+(
+    coffee_id INTEGER PRIMARY KEY,
+    shop_id INTEGER NOT NULL,
+    supplier_id INTEGER NOT NULL,
+    coffee_name VARCHAR(50) NOT NULL,
+    price_per_pound INTEGER NOT NULL,
+    FOREIGN KEY (shop_id) REFERENCES Coffee_Shop (shop_id),
+    FOREIGN KEY (supplier_id) REFERENCES Supplier (supplier_id)
+);
+
+CREATE TABLE Supplier 
+(
+    supplier_id INTEGER PRIMARY KEY,
+    company_name VARCHAR(50) NOT NULL,
+    country VARCHAR(50) NOT NULL,
+    sales_contact_name VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL
+);
+
+2. SQL Code to Populate Tables
+
+INSERT INTO Employee (employee_id, first_name, last_name, hire_date, job_title, shop_id) 
+VALUES (1, 'John', 'Smith', '01-01-2020', 'Manager', 1);
+
+INSERT INTO Employee (employee_id, first_name, last_name, hire_date, job_title, shop_id) 
+VALUES (2, 'Jane', 'Doe', '02-01-2020', 'Barista', 1);
+
+INSERT INTO Employee (employee_id, first_name, last_name, hire_date, job_title, shop_id) 
+VALUES (3, 'Tim', 'Rogers', '03-01-2020', 'Barista', 2);
+
+INSERT INTO Coffee_Shop (shop_id, shop_name, city, state) 
+VALUES (1, 'Jaunty Coffee Co', 'New York', 'NY');
+
+INSERT INTO Coffee_Shop (shop_id, shop_name, city, state) 
+VALUES (2, 'Dapper Coffee Co', 'Chicago', 'IL');
+
+INSERT INTO Coffee (coffee_id, shop_id, supplier_id, coffee_name, price_per_pound) 
+VALUES (1, 1, 1, 'Arabica', 8);
+
+INSERT INTO Coffee (coffee_id, shop_id, supplier_id, coffee_name, price_per_pound) 
+VALUES (2, 1, 2, 'Robusta', 10);
+
+INSERT INTO Coffee (coffee_id, shop_id, supplier_id, coffee_name, price_per_pound) 
+VALUES (3, 2, 3, 'Kona', 12);
+
+INSERT INTO Supplier (supplier_id, company_name, country, sales_contact_name, email) 
+VALUES (1, 'Java Beans', 'Brazil', 'John Smith', 'jsmith@javabeans.com');
+
+INSERT INTO Supplier (supplier_id, company_name, country, sales_contact_name, email) 
+VALUES (2, 'Mountain Coffee', 'Peru', 'Jane Doe', 'jdoe@mountaincoffee.com');
+
+INSERT INTO Supplier (supplier_id, company_name, country, sales_contact_name, email) 
+VALUES (3, 'Kona Roasters', 'Hawaii', 'Tim Rogers', 'trogers@konaroasters.com');
+
+3. Develop SQL Code to Create a View
+
+CREATE VIEW Employee_Full_Name
+AS
+SELECT employee_id, first_name, last_name, CONCAT(first_name, ' ', last_name) AS employee_full_name, hire_date, job_title, shop_id
+FROM Employee;
+
+4. Develop SQL Code to Create an Index on the Coffee_Name Field
+
+CREATE INDEX coffee_name_idx on Coffee (coffee_name);
+
+5. Develop SQL Code to Create a SFW (SELECT–FROM–WHERE) Query
+
+SELECT first_name, last_name, hire_date, job_title
+FROM Employee 
+WHERE shop_id = 1;
+
+6. Develop SQL Code to Create a Query 
+
+SELECT e.first_name, e.last_name, e.hire_date, e.job_title, c.coffee_name, c.price_per_pound, s.company_name 
+FROM Employee e 
+INNER JOIN Coffee c ON e.shop_id = c.shop_id 
+INNER JOIN Supplier s ON c.supplier_id = s.supplier_id;
